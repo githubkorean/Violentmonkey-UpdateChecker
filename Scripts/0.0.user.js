@@ -6,11 +6,11 @@
 // @description   테스트용 0.0버전 스크립트
 // @icon          https://www.google.com/s2/favicons?sz=256&domain_url=github.com
 // @author        mickey90427 <mickey90427@naver.com>
-// @require       https://raw.github.com/githubkorean/Violentmonkey-UpdateChecker/refs/heads/main/Scripts/MainUpdater.js
+// @require       https://github.com/githubkorean/Violentmonkey-UpdateChecker/raw/refs/heads/main/Scripts/Updater.js
 // @grant         GM.setValue
 // @grant         GM.getValue
 // @grant         GM.xmlHttpRequest
-// @grant         GM.openInTab
+// @grant         GM_openInTab
 // @license       MIT
 // ==/UserScript==
 
