@@ -3,15 +3,20 @@ console.log('CheckUpdate.js가 로드되었습니다.');
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
 // @param {string} currentVersion - 현재 스크립트 버전
 async function checkForUpdates(repo, currentVersion) {
-    // 현재 시간과 이전 무시/다시 표시 시간을 가져오기
+    // 현재 버전과 리포지토리 정보
     const now = new Date().getTime();
     const lastIgnored = await GM.getValue('version_ignore_time');
     const lastNoShow = await GM.getValue('version_no_show');
 
-    // 남은 시간 확인 및 무시 시간 처리
+    // 남은 시간 확인
+    console.log('현재 시간:', now);
+
+    // 1분 동안 무시한 경우, 아무것도 표시하지 않음
     if (lastIgnored && (now - lastIgnored < 1 * 60 * 1000)) {
         return; 
     }
+
+    // 다음날 표시할 시간인지 확인
     if (lastNoShow && now < lastNoShow) {
         return; 
     }
@@ -32,7 +37,7 @@ async function checkForUpdates(repo, currentVersion) {
                 const match = content.match(regex);
 
                 if (match) {
-                    const version = match[1]; // 첫 번째 그룹 (버전)
+                    const version = match[1]; // 첫 번째 그룹만 추출 (버전)
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트'; // 두 번째 그룹 (이름)
 
                     // 버전 비교
@@ -59,20 +64,17 @@ async function checkForUpdates(repo, currentVersion) {
                               `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
                               `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
 
-        // "예" 클릭 처리
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
             GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
             resultDiv.style.display = 'none';
         });
 
-        // "아니오" 클릭 처리
         document.getElementById('noLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleNoResponse(resultDiv);
         });
 
-        // "무시" 클릭 처리
         document.getElementById('ignoreLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleIgnoreResponse(resultDiv);
