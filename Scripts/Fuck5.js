@@ -76,9 +76,9 @@ async function checkForUpdates(repo, currentVersion) {
     function showVersionAlert(scriptName, version) {
         const resultDiv = createResultDiv();
         resultDiv.innerHTML = `${scriptName}의 최신 버전인 ${version} 버전을 받으시겠습니까?<br><br>` + 
-                              `<a href="about:blank" id="yesLink" style="color: blue;">예</a> | ` +
-                              `<a href="about:blank" id="noLink" style="color: blue;">아니오</a> | ` +
-                              `<a href="about:blank" id="ignoreLink" style="color: blue;">무시</a>`;
+                              `<a href="#" id="yesLink" style="color: blue;">예</a> | ` +
+                              `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
+                              `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
 
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
