@@ -1,4 +1,4 @@
-// TestCode2.js
+// CheckUpdate.js
 console.log('CheckUpdate.js가 로드되었습니다.');
 
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
@@ -6,7 +6,7 @@ console.log('CheckUpdate.js가 로드되었습니다.');
 async function checkForUpdates(repo, currentVersion) {
     console.log('리포지토리:', repo);
     console.log('현재 버전:', currentVersion);
-    
+
     // 무시한지 1분이 지났는지 확인
     const lastIgnored = await GM.getValue('version_ignore_time');
     const lastNoShow = await GM.getValue('version_no_show');
@@ -42,11 +42,12 @@ async function checkForUpdates(repo, currentVersion) {
                 const content = response.responseText.trim();
                 console.log('응답 내용:', content);
                 
-                const regex = /(\S+)\|?(.*)/;
+                // 정규식 수정
+                const regex = /^(\S+)\|?(.*)$/;
                 const match = content.match(regex);
 
                 if (match) {
-                    const version = match[1];
+                    const version = match[1]; // 첫 번째 그룹만 추출
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트';
                     console.log('가져온 버전:', version);
                     console.log('스크립트 이름:', scriptName);
@@ -71,7 +72,65 @@ async function checkForUpdates(repo, currentVersion) {
         }
     });
 
-    // ... 나머지 코드 생략 (showVersionAlert, showError, createResultDiv 등)
+    // 메시지 표시 함수
+    function showVersionAlert(scriptName, version) {
+        const resultDiv = createResultDiv();
+        resultDiv.innerHTML = `${scriptName}의 최신 버전인 ${version} 버전을 받으시겠습니까?<br><br>` + 
+                              `<a href="about:blank" id="yesLink" style="color: blue;">예</a> | ` +
+                              `<a href="about:blank" id="noLink" style="color: blue;">아니오</a> | ` +
+                              `<a href="about:blank" id="ignoreLink" style="color: blue;">무시</a>`;
+
+        document.getElementById('yesLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
+            resultDiv.style.display = 'none';
+        });
+
+        document.getElementById('noLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            handleNoResponse(resultDiv);
+        });
+
+        document.getElementById('ignoreLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            handleIgnoreResponse(resultDiv);
+        });
+    }
+
+    // 에러 메시지 표시 함수
+    function showError(message) {
+        const resultDiv = createResultDiv();
+        resultDiv.innerText = message;
+    }
+
+    // 결과를 표시할 요소 생성
+    function createResultDiv() {
+        const resultDiv = document.createElement('div');
+        resultDiv.style.position = 'fixed';
+        resultDiv.style.left = '10px';
+        resultDiv.style.bottom = '10px';
+        resultDiv.style.backgroundColor = '#f0f0f0';
+        resultDiv.style.color = 'black';
+        resultDiv.style.border = '1px solid black';
+        resultDiv.style.padding = '10px';
+        resultDiv.style.zIndex = '9999';
+        document.body.appendChild(resultDiv);
+        return resultDiv;
+    }
+
+    // "아니오" 클릭 처리 함수
+    function handleNoResponse(resultDiv) {
+        resultDiv.style.display = 'none';
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        GM.setValue('version_no_show', tomorrow.getTime());
+    }
+
+    // "무시" 클릭 처리 함수
+    function handleIgnoreResponse(resultDiv) {
+        resultDiv.style.display = 'none';
+        GM.setValue('version_ignore_time', new Date().getTime());
+    }
 
     // 버전 비교 함수
     function compareVersions(version1, version2) {
@@ -87,3 +146,10 @@ async function checkForUpdates(repo, currentVersion) {
         return 0;
     }
 }
+
+// 현재 스크립트 버전과 리포지토리 설정
+const currentVersion = '0.0'; // 현재 버전 설정
+const repo = 'githubkorean/Violentmonkey-UpdateChecker'; // 리포지토리 설정
+
+// 업데이트 확인 함수 호출
+checkForUpdates(repo, currentVersion);
