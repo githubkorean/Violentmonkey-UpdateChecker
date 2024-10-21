@@ -10,14 +10,14 @@ async function checkForUpdates(repo, currentVersion) {
     // 5초 동안 무시한 경우, 아무것도 표시하지 않음
     if (lastIgnored && (now - lastIgnored < 5 * 1000)) {
         const remainingTime = 5 * 1000 - (now - lastIgnored);
-        console.log(`무시 후 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
+        console.log(`업데이트 알림이 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
         return; 
     }
 
     // 다음날 표시할 시간인지 확인
     if (lastNoShow && now < lastNoShow) {
         const remainingTime = lastNoShow - now;
-        console.log(`다음날 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
+        console.log(`업데이트 알림이 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
         return; 
     }
 
