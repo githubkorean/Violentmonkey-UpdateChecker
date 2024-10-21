@@ -4,13 +4,9 @@ console.log('CheckUpdate.js가 로드되었습니다.');
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
 // @param {string} currentVersion - 현재 스크립트 버전
 async function checkForUpdates(repo, currentVersion) {
-    // 현재 버전과 리포지토리 정보
     const now = new Date().getTime();
     const lastIgnored = await GM.getValue('version_ignore_time');
     const lastNoShow = await GM.getValue('version_no_show');
-
-    // 남은 시간 확인
-    console.log('현재 시간:', now);
 
     // 1분 동안 무시한 경우, 아무것도 표시하지 않음
     if (lastIgnored && (now - lastIgnored < 1 * 60 * 1000)) {
@@ -65,6 +61,7 @@ async function checkForUpdates(repo, currentVersion) {
                               `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
                               `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
 
+        // 이벤트 리스너
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
             GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
