@@ -102,12 +102,12 @@ async function checkForUpdates(repo, currentVersion) {
         resultDiv.style.display = 'none';
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        GM.setValue('version_no_show', tomorrow.getTime());
+        GM_setValue('version_no_show', tomorrow.getTime()); // 변경
     }
-
+    
     function handleIgnoreResponse(resultDiv) {
         resultDiv.style.display = 'none';
-        GM.setValue('version_ignore_time', new Date().getTime());
+        GM_setValue('version_ignore_time', new Date().getTime()); // 변경
     }
 
     function formatTime(milliseconds) {
