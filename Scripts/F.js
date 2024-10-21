@@ -10,18 +10,18 @@ async function checkForUpdates(repo, currentVersion) {
     // 60초 동안 무시한 경우, 60초 동안 아무것도 표시하지 않음
     if (lastIgnored && (now - lastIgnored < 60 * 1000)) {
         const remainingTime = 60 * 1000 - (now - lastIgnored);
-        console.log(`업데이트 알림이 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
+        console.log(업데이트 알림이 나타나기까지 ${formatTime(remainingTime)} 남았습니다.);
         return; 
     }
 
     // 24시간 동안 무시한 경우, 24시간 동안 아무것도 표시하지 않음음
     if (lastNoShow && now < lastNoShow) {
         const remainingTime = lastNoShow - now;
-        console.log(`업데이트 알림이 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
+        console.log(업데이트 알림이 나타나기까지 ${formatTime(remainingTime)} 남았습니다.);
         return; 
     }
 
-    const versionUrl = `https://raw.github.com/${repo}/refs/heads/main/Version.txt`;
+    const versionUrl = https://raw.github.com/${repo}/refs/heads/main/Version.txt;
 
     GM.xmlHttpRequest({
         method: 'GET',
@@ -33,16 +33,16 @@ async function checkForUpdates(repo, currentVersion) {
                 const match = content.match(regex);
 
                 // 정규식 결과 콘솔로 출력
-                // console.log(`Response Content: ${content}`);
-                // console.log(`Regex Match: ${JSON.stringify(match)}`);
+                // console.log(Response Content: ${content});
+                // console.log(Regex Match: ${JSON.stringify(match)});
 
                 if (match) {
                     const version = match[1];  // 버전 정보
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트';  // 스크립트 이름
 
                     // 정규식으로 잘라온 이름과 버전 출력
-                    // console.log(`Extracted Version: ${version}`);
-                    // console.log(`Extracted Script Name: ${scriptName}`);
+                    // console.log(Extracted Version: ${version});
+                    // console.log(Extracted Script Name: ${scriptName});
 
                     if (compareVersions(version, currentVersion) > 0) {
                         showVersionAlert(scriptName, version);
@@ -57,24 +57,23 @@ async function checkForUpdates(repo, currentVersion) {
 
     function showVersionAlert(scriptName, version) {
         const resultDiv = createResultDiv();
-        resultDiv.innerHTML = `${scriptName}의 최신 버전인 ${version} 버전을 받으시겠습니까?<br><br>` + 
-                              `<a href="#" id="yesLink" style="color: blue;">예</a> | ` +
-                              `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
-                              `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
-    
-        // 클릭 리스너를 resultDiv에 추가
-        resultDiv.querySelector('#yesLink').addEventListener('click', async function(event) {
+        resultDiv.innerHTML = ${scriptName}의 최신 버전인 ${version} 버전을 받으시겠습니까?<br><br> + 
+                              <a href="#" id="yesLink" style="color: blue;">예</a> |  +
+                              <a href="#" id="noLink" style="color: blue;">아니오</a> |  +
+                              <a href="#" id="ignoreLink" style="color: blue;">무시</a>;
+
+        document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
-            await GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
+            GM_openInTab(https://github.com/${repo}/raw/master/Scripts/${version}.user.js);
             resultDiv.style.display = 'none';
         });
-    
-        resultDiv.querySelector('#noLink').addEventListener('click', function(event) {
+
+        document.getElementById('noLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleNoResponse(resultDiv);
         });
-    
-        resultDiv.querySelector('#ignoreLink').addEventListener('click', function(event) {
+
+        document.getElementById('ignoreLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleIgnoreResponse(resultDiv);
         });
@@ -116,7 +115,7 @@ async function checkForUpdates(repo, currentVersion) {
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        return `${hours}시 ${minutes}분 ${seconds}초`;
+        return ${hours}시 ${minutes}분 ${seconds}초;
     }
 
     function compareVersions(version1, version2) {
