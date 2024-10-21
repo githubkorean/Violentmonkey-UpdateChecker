@@ -61,19 +61,20 @@ async function checkForUpdates(repo, currentVersion) {
                               `<a href="#" id="yesLink" style="color: blue;">예</a> | ` +
                               `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
                               `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
-
-        document.getElementById('yesLink').addEventListener('click', function(event) {
+    
+        // 클릭 리스너를 resultDiv에 추가
+        resultDiv.querySelector('#yesLink').addEventListener('click', async function(event) {
             event.preventDefault();
-            GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
+            await GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
             resultDiv.style.display = 'none';
         });
-
-        document.getElementById('noLink').addEventListener('click', function(event) {
+    
+        resultDiv.querySelector('#noLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleNoResponse(resultDiv);
         });
-
-        document.getElementById('ignoreLink').addEventListener('click', function(event) {
+    
+        resultDiv.querySelector('#ignoreLink').addEventListener('click', function(event) {
             event.preventDefault();
             handleIgnoreResponse(resultDiv);
         });
