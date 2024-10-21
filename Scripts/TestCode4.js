@@ -43,12 +43,12 @@ async function checkForUpdates(repo, currentVersion) {
                 console.log('응답 내용:', content);
                 
                 // 정규식 수정
-                const regex = /^(\S+)\|?(.*)$/;
+                const regex = /^(\d+\.\d+)\|?(.*)$/;  // 버전과 스크립트 이름을 분리
                 const match = content.match(regex);
 
                 if (match) {
-                    const version = match[1]; // 첫 번째 그룹만 추출
-                    const scriptName = match[2] ? match[2].trim() : '현재 스크립트';
+                    const version = match[1]; // 첫 번째 그룹만 추출 (버전)
+                    const scriptName = match[2] ? match[2].trim() : '현재 스크립트'; // 두 번째 그룹 (이름)
                     console.log('가져온 버전:', version);
                     console.log('스크립트 이름:', scriptName);
 
