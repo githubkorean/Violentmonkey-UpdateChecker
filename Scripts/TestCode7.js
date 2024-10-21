@@ -1,25 +1,24 @@
-// UpdateTest.js
+// CheckUpdate.js
+console.log('CheckUpdate.js가 로드되었습니다.');
 
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
 // @param {string} currentVersion - 현재 스크립트 버전
 async function checkForUpdates(repo, currentVersion) {
-    // 무시한지 5초가 지났는지 확인
+    // 현재 버전과 리포지토리 정보
+    const now = new Date().getTime();
     const lastIgnored = await GM.getValue('version_ignore_time');
     const lastNoShow = await GM.getValue('version_no_show');
-    const now = new Date().getTime();
 
-    // 5초 동안 무시한 경우, 아무것도 표시하지 않음
-    if (lastIgnored && (now - lastIgnored < 5 * 1000)) {
-        // 남은 시간 계산
-        const remainingTime = 5 * 1000 - (now - lastIgnored);
-        console.log(`무시 후 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
+    // 남은 시간 확인
+    console.log('현재 시간:', now);
+
+    // 1분 동안 무시한 경우, 아무것도 표시하지 않음
+    if (lastIgnored && (now - lastIgnored < 1 * 60 * 1000)) {
         return; 
     }
 
     // 다음날 표시할 시간인지 확인
     if (lastNoShow && now < lastNoShow) {
-        const remainingTime = lastNoShow - now;
-        console.log(`다음날 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
         return; 
     }
 
@@ -33,22 +32,28 @@ async function checkForUpdates(repo, currentVersion) {
         onload: function(response) {
             if (response.status === 200) {
                 const content = response.responseText.trim();
-                const regex = /^(\S+)\|?(.*)$/; // 수정된 정규식
+                
+                // 정규식 수정
+                const regex = /^(\d+\.\d+)\|?(.*)$/;  // 버전과 스크립트 이름을 분리
                 const match = content.match(regex);
 
                 if (match) {
-                    const version = match[1];
-                    const scriptName = match[2] ? match[2].trim() : '현재 스크립트';
+                    const version = match[1]; // 첫 번째 그룹만 추출 (버전)
+                    const scriptName = match[2] ? match[2].trim() : '현재 스크립트'; // 두 번째 그룹 (이름)
 
                     // 버전 비교
                     if (compareVersions(version, currentVersion) > 0) {
                         showVersionAlert(scriptName, version);
                     }
+                } else {
+                    console.error('응답 내용에서 버전 정보 추출 실패.');
                 }
+            } else {
+                showError('버전 정보를 가져오는 중 오류가 발생했습니다.');
             }
         },
         onerror: function() {
-            showError('Error fetching text.');
+            showError('버전 정보 요청 중 오류 발생.');
         }
     });
 
@@ -56,9 +61,9 @@ async function checkForUpdates(repo, currentVersion) {
     function showVersionAlert(scriptName, version) {
         const resultDiv = createResultDiv();
         resultDiv.innerHTML = `${scriptName}의 최신 버전인 ${version} 버전을 받으시겠습니까?<br><br>` + 
-                              `<a href="#" id="yesLink" style="color: blue;">예</a> | ` +
-                              `<a href="#" id="noLink" style="color: blue;">아니오</a> | ` +
-                              `<a href="#" id="ignoreLink" style="color: blue;">무시</a>`;
+                              `<a href="about:blank" id="yesLink" style="color: blue;">예</a> | ` +
+                              `<a href="about:blank" id="noLink" style="color: blue;">아니오</a> | ` +
+                              `<a href="about:blank" id="ignoreLink" style="color: blue;">무시</a>`;
 
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
@@ -112,15 +117,6 @@ async function checkForUpdates(repo, currentVersion) {
         GM.setValue('version_ignore_time', new Date().getTime());
     }
 
-    // 남은 시간을 시:분:초 형식으로 포맷하는 함수
-    function formatTime(milliseconds) {
-        const totalSeconds = Math.floor(milliseconds / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        return `${hours}시 ${minutes}분 ${seconds}초`;
-    }
-
     // 버전 비교 함수
     function compareVersions(version1, version2) {
         const v1Parts = version1.split('.').map(Number);
@@ -135,3 +131,10 @@ async function checkForUpdates(repo, currentVersion) {
         return 0;
     }
 }
+
+// 현재 스크립트 버전과 리포지토리 설정
+const currentVersion = '0.0'; // 현재 버전 설정
+const repo = 'githubkorean/Violentmonkey-UpdateChecker'; // 리포지토리 설정
+
+// 업데이트 확인 함수 호출
+checkForUpdates(repo, currentVersion);
