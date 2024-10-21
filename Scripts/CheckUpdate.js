@@ -1,4 +1,5 @@
-// UpdateTest.js
+// CheckUpdate.js
+console.log('CheckUpdate.js가 로드되었습니다.');
 
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
 // @param {string} currentVersion - 현재 스크립트 버전
