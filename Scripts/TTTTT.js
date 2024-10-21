@@ -37,10 +37,7 @@ async function checkForUpdates(repo, currentVersion) {
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트';  // 스크립트 이름
 
                     if (compareVersions(version, currentVersion) > 0) {
-                        // 여기서 특정 조건을 추가하여 알림창을 띄우지 않도록 수정합니다.
-                        if (version !== currentVersion) { // 이 조건을 수정하여 예를 눌렀을 때 알림이 안 뜨도록 할 수 있습니다.
-                            showVersionAlert(scriptName, version);
-                        }
+                        showVersionAlert(scriptName, version);
                     }
                 }
             }
@@ -59,7 +56,11 @@ async function checkForUpdates(repo, currentVersion) {
 
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
-            GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
+            const updateUrl = `https://github.com/${repo}/raw/master/Scripts/${version}.user.js`;
+            // URL이 이미 열린 탭에서 열리는지 확인
+            if (window.location.href !== updateUrl) {
+                GM_openInTab(updateUrl);
+            }
             resultDiv.style.display = 'none';
         });
 
