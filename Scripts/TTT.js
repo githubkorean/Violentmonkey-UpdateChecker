@@ -32,19 +32,19 @@ async function checkForUpdates(repo, currentVersion) {
                 const regex = /([0-9]+\.[0-9]+)\|?(.*)/;  // 정규식
                 const match = content.match(regex);
 
-                // 특정 URL에서는 업데이트 알림창을 띄우지 않도록 설정
-                if (content.includes("특정업데이트URL")) {
-                    console.log("특정 업데이트 URL에서는 알림창을 띄우지 않습니다.");
-                    return; 
-                }
-
-                // 정규식 결과 콘솔로 출력
                 if (match) {
                     const version = match[1];  // 버전 정보
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트';  // 스크립트 이름
 
                     if (compareVersions(version, currentVersion) > 0) {
-                        showVersionAlert(scriptName, version);
+                        // 특정 URL에 대해서는 업데이트 알림을 띄우지 않음
+                        const noAlertUrls = [
+                            'https://github.com/yourusername/yourrepo/raw/path/to/yourfile.user.js' // 여기에 무시할 URL 추가
+                        ];
+
+                        if (!noAlertUrls.includes(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`)) {
+                            showVersionAlert(scriptName, version);
+                        }
                     }
                 }
             }
