@@ -8,8 +8,8 @@ async function checkForUpdates(repo, currentVersion) {
     const now = new Date().getTime();
 
     // 60초 동안 무시한 경우, 60초 동안 아무것도 표시하지 않음
-    if (lastIgnored && (now - lastIgnored < 5 * 1000)) {
-        const remainingTime = 5 * 1000 - (now - lastIgnored);
+    if (lastIgnored && (now - lastIgnored < 60 * 1000)) {
+        const remainingTime = 60 * 1000 - (now - lastIgnored);
         console.log(`업데이트 알림이 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
         return; 
     }
