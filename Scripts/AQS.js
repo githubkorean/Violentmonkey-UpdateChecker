@@ -62,7 +62,7 @@ async function checkForUpdates(repo, currentVersion) {
 
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
-            GM_openInTab(`https://github.com/${repo}/raw/refs/master/Scripts/${version}.user.js`);
+            GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
             resultDiv.style.display = 'none';
         });
 
