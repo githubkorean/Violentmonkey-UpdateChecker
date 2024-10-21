@@ -102,12 +102,12 @@ async function checkForUpdates(repo, currentVersion) {
         resultDiv.style.display = 'none';
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        GM.setValue('version_no_show', tomorrow.getTime());
+        GM.storage.set('version_no_show', tomorrow.getTime()); // 수정된 부분
     }
-
+    
     function handleIgnoreResponse(resultDiv) {
         resultDiv.style.display = 'none';
-        GM.setValue('version_ignore_time', new Date().getTime());
+        GM.storage.set('version_ignore_time', new Date().getTime()); // 수정된 부분
     }
 
     function formatTime(milliseconds) {
