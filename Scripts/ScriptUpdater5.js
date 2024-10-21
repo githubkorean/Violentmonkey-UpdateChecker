@@ -98,16 +98,18 @@ async function checkForUpdates(repo, currentVersion) {
         return resultDiv;
     }
 
-    function handleNoResponse(resultDiv) {
+    // "아니오" 클릭 처리 함수
+    async function handleNoResponse(resultDiv) {
         resultDiv.style.display = 'none';
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        GM.storage.set('version_no_show', tomorrow.getTime()); // 수정된 부분
+        await GM.storage.set('version_no_show', tomorrow.getTime()); // GM.storage 사용
     }
-    
-    function handleIgnoreResponse(resultDiv) {
+
+    // "무시" 클릭 처리 함수
+    async function handleIgnoreResponse(resultDiv) {
         resultDiv.style.display = 'none';
-        GM.storage.set('version_ignore_time', new Date().getTime()); // 수정된 부분
+        await GM.storage.set('version_ignore_time', new Date().getTime()); // GM.storage 사용
     }
 
     function formatTime(milliseconds) {
