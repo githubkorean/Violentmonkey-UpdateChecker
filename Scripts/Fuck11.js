@@ -32,17 +32,9 @@ async function checkForUpdates(repo, currentVersion) {
                 const regex = /(\S+)\|(.+)/; // 수정된 정규식
                 const match = content.match(regex);
 
-                // 정규식 결과 콘솔로 출력
-                console.log(`Response Content: ${content}`);
-                console.log(`Regex Match: ${JSON.stringify(match)}`);
-
                 if (match) {
                     const version = match[1]; // 버전
                     const scriptName = match[2].trim(); // 스크립트 이름
-
-                    // 정규식으로 잘라온 이름과 버전 출력
-                    console.log(`Extracted Version: ${version}`);
-                    console.log(`Extracted Script Name: ${scriptName}`);
 
                     if (compareVersions(version, currentVersion) > 0) {
                         showVersionAlert(scriptName, version);
