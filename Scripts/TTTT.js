@@ -37,12 +37,8 @@ async function checkForUpdates(repo, currentVersion) {
                     const scriptName = match[2] ? match[2].trim() : '현재 스크립트';  // 스크립트 이름
 
                     if (compareVersions(version, currentVersion) > 0) {
-                        // 특정 URL에 대해서는 업데이트 알림을 띄우지 않음
-                        const noAlertUrls = [
-                            'https://github.com/yourusername/yourrepo/raw/path/to/yourfile.user.js' // 여기에 무시할 URL 추가
-                        ];
-
-                        if (!noAlertUrls.includes(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`)) {
+                        // 여기서 특정 조건을 추가하여 알림창을 띄우지 않도록 수정합니다.
+                        if (version !== currentVersion) { // 이 조건을 수정하여 예를 눌렀을 때 알림이 안 뜨도록 할 수 있습니다.
                             showVersionAlert(scriptName, version);
                         }
                     }
