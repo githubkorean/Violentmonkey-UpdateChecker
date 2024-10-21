@@ -83,17 +83,21 @@ async function checkForUpdates(repo, currentVersion) {
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
             GM_openInTab(`https://github.com/${repo}/raw/master/Scripts/${version}.user.js`);
-            resultDiv.style.display = 'none';
+            resultDiv.style.display = 'none';  // 상자 숨기기
         });
 
         document.getElementById('noLink').addEventListener('click', function(event) {
             event.preventDefault();
-            handleNoResponse(resultDiv);
+            resultDiv.style.display = 'none';  // 상자 숨기기
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            GM.setValue('version_no_show', tomorrow.getTime());
         });
 
         document.getElementById('ignoreLink').addEventListener('click', function(event) {
             event.preventDefault();
-            handleIgnoreResponse(resultDiv);
+            resultDiv.style.display = 'none';  // 상자 숨기기
+            GM.setValue('version_ignore_time', new Date().getTime());
         });
     }
 
@@ -116,20 +120,6 @@ async function checkForUpdates(repo, currentVersion) {
         resultDiv.style.zIndex = '9999';
         document.body.appendChild(resultDiv);
         return resultDiv;
-    }
-
-    // "아니오" 클릭 처리 함수
-    function handleNoResponse(resultDiv) {
-        resultDiv.style.display = 'none';
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        GM.setValue('version_no_show', tomorrow.getTime());
-    }
-
-    // "무시" 클릭 처리 함수
-    function handleIgnoreResponse(resultDiv) {
-        resultDiv.style.display = 'none';
-        GM.setValue('version_ignore_time', new Date().getTime());
     }
 
     // 버전 비교 함수
