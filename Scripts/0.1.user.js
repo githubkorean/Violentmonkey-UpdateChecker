@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name          업데이트 테스트 0.1
 // @namespace     https://github.com/githubkorean/Violentmonkey-UpdateChecker
+// @supportURL    https://github.com/githubkorean/Violentmonkey-UpdateChecker
+// @homepageURL   https://github.com/githubkorean/Violentmonkey-UpdateChecker
 // @match         *://*/*
 // @version       0.1
 // @description   테스트용 0.1버전 스크립트
