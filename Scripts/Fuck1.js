@@ -33,7 +33,7 @@ async function checkForUpdates(repo, currentVersion) {
         onload: function(response) {
             if (response.status === 200) {
                 const content = response.responseText.trim();
-                const regex = /(\S+)\|?(.*)/;
+                const regex = /^(\d+\.\d+)\|?(.*)$/;
                 const match = content.match(regex);
 
                 if (match) {
