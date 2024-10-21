@@ -56,10 +56,11 @@ async function checkForUpdates(repo, currentVersion) {
 
         document.getElementById('yesLink').addEventListener('click', function(event) {
             event.preventDefault();
-            const updateUrl = `https://github.com/${repo}/raw/master/Scripts/${version}.user.js`;
-            // URL이 이미 열린 탭에서 열리는지 확인
-            if (window.location.href !== updateUrl) {
-                GM_openInTab(updateUrl);
+            // 예를 눌렀을 때, 업데이트 페이지에선 알림을 띄우지 않도록 처리
+            const currentPage = window.location.href;
+            const updatePage = `https://github.com/${repo}/raw/master/Scripts/${version}.user.js`;
+            if (currentPage !== updatePage) {
+                GM_openInTab(updatePage);
             }
             resultDiv.style.display = 'none';
         });
