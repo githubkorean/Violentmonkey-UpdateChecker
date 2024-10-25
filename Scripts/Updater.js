@@ -3,20 +3,20 @@
 // @param {string} repo - GitHub 리포지토리 (예: githubkorean/Test)
 // @param {string} currentVersion - 현재 스크립트 버전
 async function checkForUpdates(repo, currentVersion) {
-    // 무시한지 5초가 지났는지 확인
+    // 무시한지 5분이 지났는지 확인
     const lastIgnored = await GM.getValue('version_ignore_time');
     const lastNoShow = await GM.getValue('version_no_show');
     const now = new Date().getTime();
 
-    // 5초 동안 무시한 경우, 아무것도 표시하지 않음
-    if (lastIgnored && (now - lastIgnored < 5 * 1000)) {
+    // 5분 동안 무시한 경우, 아무것도 표시하지 않음
+    if (lastIgnored && (now - lastIgnored < 5 * 60 * 1000)) {
         // 남은 시간 계산
-        const remainingTime = 5 * 1000 - (now - lastIgnored);
+        const remainingTime = 5 * 60 * 1000 - (now - lastIgnored);
         console.log(`무시 후 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
         return; 
     }
 
-    // 다음날 표시할 시간인지 확인
+    // 다음날 까지 무시한 경우, 아무것도 표시하지 않음
     if (lastNoShow && now < lastNoShow) {
         const remainingTime = lastNoShow - now;
         console.log(`다음날 다시 나타나기까지 ${formatTime(remainingTime)} 남았습니다.`);
